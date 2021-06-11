@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "compile": "truffle compile",
-    "script:xdai": "npm run compile && truffle exec scripts/create-vote.js --network xdai"
+    "script:xdai": "truffle exec scripts/create-vote.js --network xdai",
+    "compile:script:xdai": "npm run compile && npm run script:xdai"
   },
   "dependencies": {
     "@1hive/apps-dandelion-voting": "2.0.0",
