@@ -58,7 +58,12 @@ module.exports = {
       provider: providerForNetwork('xdai'),
       gas: 95e5,
       gasPrice: 1000000000,
-    }
+    },
+    matic: {
+      network_id: '*',
+      provider: providerForNetwork('matic'),
+      gasPrice: 1000000000,
+    },
   },
   // Configure your compilers
   compilers: {
