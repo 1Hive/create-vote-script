@@ -1,30 +1,21 @@
-const BrightIdRegister = artifacts.require("BrightIdRegister.sol")
 const ACL = artifacts.require("ACL.sol")
 const {encodeCallScript} = require("@aragon/test-helpers/evmScript")
 
-const BRIGHT_ID_REGISTER_ADDRESS = "0x7714eb44754cb9db6d65b61f3352df12600dc593"
+const AGREEMENT = "0x59a15718992a42082ab2306bc6cbd662958a178c"
 const ACL_ADDRESS = "0xbc4fb635636b81e60a4e356c4dceb53cac507d03"
-const VERIFIER = "0xb1d71F62bEe34E9Fc349234C201090c33BCdF6DB"
-const UPDATE_SETTINGS_ROLE = "0x9d4f140430c9045e12b5a104aa9e641c09b980a26ab8e12a32a2f3d155229ae3"
-const CELESTE_GOVERNOR = "0x23e4941f58896705d5c29d641979c4f66b03496f"
+const MANAGE_DISPUTABLE_ROLE = "0x2309a8cbbd5c3f18649f3b7ac47a0e7b99756c2ac146dda1ffc80d3f80827be"
+const COLLATERAL_REQUIREMENT_UPDATER = "0xc08fbc829a879470c15916aad14e85905e6ab901"
 
 
 const createVoteScript = async () => {
-  const brightIdRegister = await BrightIdRegister.at(BRIGHT_ID_REGISTER_ADDRESS)
-  const updateVerifier = brightIdRegister.contract.methods.setBrightIdVerifiers([VERIFIER], 1).encodeABI()
-  const updateVerifierAction = {
-    to: BRIGHT_ID_REGISTER_ADDRESS,
-    calldata: updateVerifier
-  }
-
   const acl = await ACL.at(ACL_ADDRESS)
-  const grantUpdateSettingsRole = acl.contract.methods.grantPermission(CELESTE_GOVERNOR, BRIGHT_ID_REGISTER_ADDRESS, UPDATE_SETTINGS_ROLE).encodeABI()
+  const grantUpdateSettingsRole = acl.contract.methods.grantPermission(COLLATERAL_REQUIREMENT_UPDATER, AGREEMENT, MANAGE_DISPUTABLE_ROLE).encodeABI()
   const grantTransferPermissionAction = {
     to: ACL_ADDRESS,
     calldata: grantUpdateSettingsRole
   }
 
-  return encodeCallScript([updateVerifierAction, grantTransferPermissionAction])
+  return encodeCallScript([grantTransferPermissionAction])
 }
 
 module.exports = async (callback) => {
